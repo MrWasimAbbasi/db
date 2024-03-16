@@ -1,26 +1,26 @@
 <?php
 
 namespace DB;
+
+use PDO;
+use PDOStatement;
+
 class QueryResult
 {
-    private \mysqli_result $result;
+    private PDOStatement $statement;
 
-    public function __construct(\mysqli_result $result)
+    public function __construct(PDOStatement $statement)
     {
-        $this->result = $result;
+        $this->statement = $statement;
     }
 
     public function one(): ?array
     {
-        return $this->result->fetch_assoc();
+        return $this->statement->fetch(PDO::FETCH_ASSOC);
     }
 
     public function all(): array
     {
-        $rows = [];
-        while ($row = $this->result->fetch_assoc()) {
-            $rows[] = $row;
-        }
-        return $rows;
+        return $this->statement->fetchAll(PDO::FETCH_ASSOC);
     }
 }

@@ -27,7 +27,7 @@ class DBTest extends TestCase
 
     public function testOne(): void
     {
-        $result = $this->db->query("SELECT * FROM users WHERE id = 1");
+        $result = $this->db->query("SELECT * FROM users WHERE id = ?", [1]);
         $row = $result->one();
         $this->assertIsArray($row);
         $this->assertArrayHasKey('id', $row);
