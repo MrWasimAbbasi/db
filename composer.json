@@ -1,5 +1,5 @@
 {
-  "name": "mrwasimabbasi/db",
+  "name": "photo/db",
   "description": "A PHP package for MySQL database connection and basic tasks",
   "require": {
     "php": ">=8.0",
