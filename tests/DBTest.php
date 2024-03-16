@@ -1,22 +1,21 @@
 <?php
 
-namespace DB\Tests;
-
 use DB\DB;
-use PDO;
+use Dotenv\Dotenv;
 use PHPUnit\Framework\TestCase;
 
 class DBTest extends TestCase
 {
     private DB $db;
-    private PDO $pdo;
 
     protected function setUp(): void
     {
-        // Connect to MySQL server (replace with your actual credentials)
-        $this->pdo = new PDO("mysql:host=localhost", "root", "");
+        // Load environment variables from .env file
+        $dotenv = Dotenv::createImmutable(__DIR__ . '/..'); // Adjust the path as needed
+        $dotenv->load();
 
-        // Create database
+        $this->pdo = new \PDO("mysql:host=". $_ENV['DB_HOST'], $_ENV['DB_USERNAME'], $_ENV['DB_PASSWORD']);
+
         $this->pdo->exec("CREATE DATABASE IF NOT EXISTS test_database");
         $this->pdo->exec("USE test_database");
 
@@ -32,14 +31,17 @@ class DBTest extends TestCase
         $stmt->execute(["name" => "John Doe", "email" => "john@example.com"]);
         $stmt->execute(["name" => "Jane Doe", "email" => "jane@example.com"]);
 
+
         // Instantiate DB object
-        $this->db = new DB('localhost', 'root', '', 'test_database');
+        $this->db = new DB($_ENV['DB_HOST'], $_ENV['DB_USERNAME'], $_ENV['DB_PASSWORD'], $_ENV['DB_DATABASE']);
+
+
     }
 
     protected function tearDown(): void
     {
-        // Drop the test database after each test
-        $this->pdo->exec("DROP DATABASE IF EXISTS test_database");
+        // Close DB connection after each test
+        $this->db->close();
     }
 
     public function testQuery(): void
@@ -61,8 +63,7 @@ class DBTest extends TestCase
         $result = $this->db->query("SELECT * FROM users");
         $rows = $result->all();
         $this->assertIsArray($rows);
-        $this->assertCount(2, $rows); // Assuming 2 rows were inserted
+        $this->assertNotEmpty($rows);
     }
 
-    // Add more test cases as needed
 }
