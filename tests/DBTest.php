@@ -14,10 +14,10 @@ class DBTest extends TestCase
         $dotenv = Dotenv::createImmutable(__DIR__ . '/..'); // Adjust the path as needed
         $dotenv->load();
 
-        $this->pdo = new \PDO("mysql:host=". $_ENV['DB_HOST'], $_ENV['DB_USERNAME'], $_ENV['DB_PASSWORD']);
+        $this->pdo = new \PDO("mysql:host=" . $_ENV['DB_HOST'], $_ENV['DB_USERNAME'], $_ENV['DB_PASSWORD']);
 
-        $this->pdo->exec("CREATE DATABASE IF NOT EXISTS test_database");
-        $this->pdo->exec("USE test_database");
+        $this->pdo->exec("CREATE DATABASE IF NOT EXISTS " . $_ENV['DB_DATABASE']);
+        $this->pdo->exec("USE " . $_ENV['DB_DATABASE']);
 
         // Create users table
         $this->pdo->exec("CREATE TABLE IF NOT EXISTS users (
